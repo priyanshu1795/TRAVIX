@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TRAVIX — AI Travel Planner</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Lucide icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+  <!-- ===== PAGE LOADER ===== -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">TRAVIX</div>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+      <p class="loader-text">Preparing your journey...</p>
+    </div>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar">
+    <div class="nav-brand">TRAV<span>IX</span></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#planner">Planner</a></li>
+      <li><a href="#destinations">Destinations</a></li>
+      <li><a href="#calculator">Budget</a></li>
+      <li><a href="#features">Features</a></li>
+    </ul>
+    <button class="nav-cta" onclick="scrollTo('#planner')">Plan Now</button>
+    <button class="hamburger" id="hamburger" aria-label="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="home" class="hero">
+    <!-- Animated gradient mesh background -->
+    <div class="hero-bg">
+      <div class="mesh-blob blob1"></div>
+      <div class="mesh-blob blob2"></div>
+      <div class="mesh-blob blob3"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Floating clouds -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <!-- Floating airplane -->
+    <div class="airplane-wrap">
+      <svg class="airplane-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 8L4 28l16 8 4 20 8-14 16 6z" fill="rgba(255,255,255,0.9)" stroke="white" stroke-width="1.5"/>
+        <path d="M20 36l6-8" stroke="white" stroke-width="1.5"/>
+      </svg>
+    </div>
+
+    <!-- Stars -->
+    <div class="stars" id="stars"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">✦ AI-Powered Travel Intelligence</div>
+      <h1 class="hero-heading">
+        Plan Your<br>
+        <span class="gradient-text" id="typingText">Dream Trip</span><br>
+        with <em>AI</em>
+      </h1>
+      <p class="hero-sub">Smart, budget-friendly, and hyper-personalized travel suggestions — crafted for you, instantly.</p>
+      <div class="hero-actions">
+        <button class="btn-primary glow-btn" onclick="document.getElementById('planner').scrollIntoView({behavior:'smooth'})">
+          <i data-lucide="sparkles" class="btn-icon"></i> Generate My Trip
+        </button>
+        <button class="btn-ghost" onclick="document.getElementById('destinations').scrollIntoView({behavior:'smooth'})">
+          Explore Destinations ↓
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" data-target="50">0</span>K+<div class="stat-label">Trips Planned</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num" data-target="120">0</span>+<div class="stat-label">Destinations</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num" data-target="98">0</span>%<div class="stat-label">Satisfaction</div></div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="scroll-dot"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
+
+  <!-- ===== AI TRIP PLANNER FORM ===== -->
+  <section id="planner" class="planner-section">
+    <div class="section-label">✦ AI PLANNER</div>
+    <h2 class="section-title">Generate Your <span>Perfect Trip</span></h2>
+    <p class="section-sub">Fill in your preferences and let TRAVIX craft a personalized itinerary in seconds.</p>
+
+    <div class="planner-card glass-card">
+      <div class="form-grid">
+        <div class="input-group">
+          <label><i data-lucide="map-pin" class="input-icon"></i> Destination</label>
+          <input type="text" id="destination" placeholder="e.g. Goa, Bali, Paris..." autocomplete="off"/>
+          <div class="suggestions-box" id="suggBox"></div>
+        </div>
+        <div class="input-group">
+          <label><i data-lucide="indian-rupee" class="input-icon"></i> Total Budget (₹)</label>
+          <input type="number" id="budget" placeholder="e.g. 25000" min="1000"/>
+        </div>
+        <div class="input-group">
+          <label><i data-lucide="calendar" class="input-icon"></i> Number of Days</label>
+          <input type="number" id="days" placeholder="e.g. 5" min="1" max="30"/>
+        </div>
+        <div class="input-group">
+          <label><i data-lucide="users" class="input-icon"></i> Travel Type</label>
+          <select id="travelType">
+            <option value="">Select Travel Style</option>
+            <option value="adventure">🏔️ Adventure</option>
+            <option value="solo">🧳 Solo</option>
+            <option value="family">👨‍👩‍👧 Family</option>
+            <option value="romantic">💑 Romantic</option>
+            <option value="luxury">👑 Luxury</option>
+            <option value="budget">💰 Budget</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label><i data-lucide="sun" class="input-icon"></i> Travel Season</label>
+          <select id="season">
+            <option value="">Select Season</option>
+            <option value="summer">☀️ Summer</option>
+            <option value="winter">❄️ Winter</option>
+            <option value="monsoon">🌧️ Monsoon</option>
+            <option value="spring">🌸 Spring</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label><i data-lucide="users-2" class="input-icon"></i> Number of Travellers</label>
+          <input type="number" id="travellers" placeholder="e.g. 2" min="1" max="20"/>
+        </div>
+      </div>
+      <button class="btn-primary generate-btn" id="generateBtn">
+        <i data-lucide="sparkles" class="btn-icon"></i>
+        Generate My AI Plan
+        <div class="btn-ripple"></div>
+      </button>
+    </div>
+
+    <!-- AI Result Output -->
+    <div class="result-section" id="resultSection" style="display:none;">
+      <div class="result-header">
+        <div class="result-badge">✦ AI GENERATED PLAN</div>
+        <h3 id="resultTitle">Your Trip to <span id="resultDest"></span></h3>
+      </div>
+      <div class="result-grid" id="resultGrid"></div>
+      <div class="itinerary-section">
+        <h4>📅 Day-wise Itinerary</h4>
+        <div id="itineraryList" class="itinerary-list"></div>
+      </div>
+      <div class="tips-box">
+        <h4>💡 Budget-Saving Tips</h4>
+        <ul id="tipsList"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DESTINATION CARDS ===== -->
+  <section id="destinations" class="destinations-section">
+    <div class="section-label">✦ TOP PICKS</div>
+    <h2 class="section-title">Trending <span>Destinations</span></h2>
+    <p class="section-sub">Handpicked destinations with real-time budget estimates and hidden gems.</p>
+
+    <!-- Search & Filter -->
+    <div class="dest-controls">
+      <div class="search-bar">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" id="destSearch" placeholder="Search destinations..." oninput="filterDestinations()"/>
+      </div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterByTag('all', this)">All</button>
+        <button class="filter-tab" onclick="filterByTag('beach', this)">🏖️ Beach</button>
+        <button class="filter-tab" onclick="filterByTag('mountain', this)">🏔️ Mountain</button>
+        <button class="filter-tab" onclick="filterByTag('culture', this)">🏛️ Culture</button>
+        <button class="filter-tab" onclick="filterByTag('international', this)">✈️ International</button>
+      </div>
+    </div>
+
+    <div class="dest-grid" id="destGrid"></div>
+  </section>
+
+  <!-- ===== BUDGET CALCULATOR ===== -->
+  <section id="calculator" class="calculator-section">
+    <div class="section-label">✦ SMART BUDGET</div>
+    <h2 class="section-title">Travel Budget <span>Calculator</span></h2>
+    <p class="section-sub">Estimate your complete trip cost with our intelligent budget breakdown tool.</p>
+
+    <div class="calc-container glass-card">
+      <div class="calc-inputs">
+        <div class="calc-item">
+          <label><i data-lucide="hotel" class="input-icon"></i> Hotel (₹/night)</label>
+          <input type="number" class="calc-input" id="hotelCost" placeholder="2500" oninput="calcTotal()"/>
+          <input type="range" class="slider" id="hotelSlider" min="500" max="20000" value="2500" oninput="syncSlider('hotelCost','hotelSlider'); calcTotal()"/>
+        </div>
+        <div class="calc-item">
+          <label><i data-lucide="utensils" class="input-icon"></i> Food (₹/day)</label>
+          <input type="number" class="calc-input" id="foodCost" placeholder="800" oninput="calcTotal()"/>
+          <input type="range" class="slider" id="foodSlider" min="200" max="5000" value="800" oninput="syncSlider('foodCost','foodSlider'); calcTotal()"/>
+        </div>
+        <div class="calc-item">
+          <label><i data-lucide="train" class="input-icon"></i> Transport (₹/trip)</label>
+          <input type="number" class="calc-input" id="transportCost" placeholder="3000" oninput="calcTotal()"/>
+          <input type="range" class="slider" id="transportSlider" min="500" max="30000" value="3000" oninput="syncSlider('transportCost','transportSlider'); calcTotal()"/>
+        </div>
+        <div class="calc-item">
+          <label><i data-lucide="ticket" class="input-icon"></i> Activities (₹/day)</label>
+          <input type="number" class="calc-input" id="actCost" placeholder="500" oninput="calcTotal()"/>
+          <input type="range" class="slider" id="actSlider" min="0" max="5000" value="500" oninput="syncSlider('actCost','actSlider'); calcTotal()"/>
+        </div>
+        <div class="calc-item">
+          <label><i data-lucide="calendar-days" class="input-icon"></i> Number of Days</label>
+          <input type="number" class="calc-input" id="calcDays" placeholder="5" oninput="calcTotal()"/>
+        </div>
+      </div>
+      <div class="calc-result">
+        <div class="calc-total-box">
+          <p>Estimated Total</p>
+          <div class="total-amount">₹<span id="totalCost">0</span></div>
+          <div class="per-day">≈ ₹<span id="perDay">0</span> per day</div>
+        </div>
+        <div class="breakdown-bars" id="breakdownBars"></div>
+        <button class="btn-primary" style="width:100%;margin-top:1.5rem;" onclick="applyToPlanner()">
+          <i data-lucide="arrow-right" class="btn-icon"></i> Apply to Planner
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section id="features" class="features-section">
+    <div class="section-label">✦ WHY TRAVIX</div>
+    <h2 class="section-title">Everything You Need to <span>Travel Smart</span></h2>
+    <div class="features-grid" id="featuresGrid"></div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section id="testimonials" class="testimonials-section">
+    <div class="section-label">✦ TRAVELLERS SAY</div>
+    <h2 class="section-title">Real Stories, <span>Real Journeys</span></h2>
+    <div class="testimonial-slider">
+      <div class="testimonials-track" id="testimonialsTrack"></div>
+      <div class="slider-dots" id="sliderDots"></div>
+      <button class="slider-btn prev-btn" onclick="changeTestimonial(-1)">‹</button>
+      <button class="slider-btn next-btn" onclick="changeTestimonial(1)">›</button>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">TRAV<span>IX</span></div>
+        <p>Your intelligent travel companion. Plan smarter, travel better, spend less.</p>
+        <div class="social-links">
+          <a href="#" aria-label="twitter"><i data-lucide="twitter"></i></a>
+          <a href="#" aria-label="instagram"><i data-lucide="instagram"></i></a>
+          <a href="#" aria-label="youtube"><i data-lucide="youtube"></i></a>
+          <a href="#" aria-label="linkedin"><i data-lucide="linkedin"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#planner">AI Planner</a></li>
+          <li><a href="#destinations">Destinations</a></li>
+          <li><a href="#calculator">Budget Calc</a></li>
+          <li><a href="#features">Features</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><i data-lucide="mail" style="width:14px;display:inline"></i> hello@travix.ai</li>
+          <li><i data-lucide="phone" style="width:14px;display:inline"></i> +91 98765 43210</li>
+          <li><i data-lucide="map-pin" style="width:14px;display:inline"></i> New Delhi, India</li>
+        </ul>
+      </div>
+      <div class="footer-col newsletter-col">
+        <h4>Newsletter</h4>
+        <p>Get weekly travel deals & AI-curated itineraries.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="your@email.com"/>
+          <button>→</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 TRAVIX. All rights reserved. Built with ✦ for explorers.</p>
+    </div>
+  </footer>
+
+  <!-- ===== FLOATING ELEMENTS ===== -->
+  <!-- Scroll to top -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i data-lucide="chevron-up"></i>
+  </button>
+
+  <!-- AI Chatbot FAB -->
+  <div class="chatbot-fab" id="chatbotFab" onclick="toggleChat()">
+    <i data-lucide="bot"></i>
+    <div class="fab-pulse"></div>
+  </div>
+
+  <!-- Chat Window -->
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+      <div class="chat-avatar"><i data-lucide="bot"></i></div>
+      <div>
+        <strong>TRAVIX AI</strong>
+        <small>Your travel assistant</small>
+      </div>
+      <button class="chat-close" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">
+        👋 Hi! I'm your TRAVIX AI assistant. Ask me anything about travel planning, budgets, or destinations!
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter') sendChat()"/>
+      <button onclick="sendChat()"><i data-lucide="send"></i></button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
